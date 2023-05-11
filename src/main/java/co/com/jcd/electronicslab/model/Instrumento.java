@@ -10,8 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "instrumentos")
+@Getter
+@Setter
 public class Instrumento implements Serializable{
 
 	private static final long serialVersionUID = 203011659949123810L;
