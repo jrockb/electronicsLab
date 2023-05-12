@@ -16,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,12 +34,21 @@ public class Usuario implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotEmpty
 	@Column(name = "nombre_usuario")
 	private String nombre;
+	@NotEmpty
 	@Column(name = "apellido_usuario")
 	private String apellido;
+	@NotEmpty
+	@Size(min =  3, max = 8) // para definir un minimo y maximo de caracteres
+	private String aliasUsuario;
+	@NotEmpty
 	private String telefono;
+	@NotEmpty
 	private String direccion;
+	@NotEmpty
+	@Email(message = "Correo con formato incorrecto")
 	private String email;
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name="usuario_instrumento", 

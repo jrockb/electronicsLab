@@ -12,12 +12,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "proyectos")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Proyecto implements Serializable{
 
 	private static final long serialVersionUID = 3308084694874741599L;
@@ -30,10 +32,20 @@ public class Proyecto implements Serializable{
 	@Column(name = "fecha_inicio")
 	private Date fechaInicio;
 	@Column(name = "fecha_Fin")
-	private Date fechaFin;
+	private Date fechaFin; 
 	@ManyToOne(targetEntity = Usuario.class)
 	private Usuario usuario;
 	
+	public Proyecto(String nombre, String tipo, 
+			Date fechaInicio, Date fechaFin) {
+		this.nombre = nombre;
+		this.tipo = tipo;
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
+	}
 	
-
+	
+	
+	
+		
 }

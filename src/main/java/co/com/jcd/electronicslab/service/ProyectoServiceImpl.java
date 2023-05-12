@@ -16,16 +16,16 @@ public class ProyectoServiceImpl implements IProyectoService {
 	
 	@Autowired
 	private IProyectoDao proyectoDao;
+	
+	// mejoras: validar si se puede crear el objeto a persistir usando un mapper.
+	// agregar a la entidad el campo fechaCreacion y agregar el valor en este metodo.
 
 	@Override
 	@Transactional
 	public ResponseEntity<ProyectoResponse> crearProyecto(ProyectoRequest request) {
 		ProyectoResponse response = new ProyectoResponse();
-		Proyecto proyecto  = new Proyecto(); // mejorar la creacion del objeto a persistir usando un mapper
-		proyecto.setNombre(request.getNombreProyecto());
-		proyecto.setTipo(request.getTipoProyecto());
-		proyecto.setFechaInicio(request.getFechaInicio());
-		proyecto.setFechaFin(proyecto.getFechaFin());
+		Proyecto proyecto  = new Proyecto(request.getNombreProyecto(), request.getTipoProyecto(), 
+				request.getFechaInicio(), request.getFechaFin());
 		try {
 			Proyecto proyectoGuardar = proyectoDao.save(proyecto);
 			if(proyectoGuardar.getId() != null) {
