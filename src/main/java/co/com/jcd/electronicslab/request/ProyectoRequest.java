@@ -14,7 +14,7 @@ public class ProyectoRequest {
 	@NotEmpty // valida que el String no este vacío 
 	private String nombreProyecto;
 	@NotEmpty(message = "debe haber una descripcion del tipo de proyecto")
-	private String tipoProyecto;	
+	private String tipoProyecto;
 	private Date fechaInicio;
 	private Date fechaFin;
 	private Long idUsuario;
