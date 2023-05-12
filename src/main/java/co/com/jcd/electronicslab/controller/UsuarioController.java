@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.jcd.electronicslab.request.UsuarioRequest;
+import co.com.jcd.electronicslab.response.ResponseRest;
 import co.com.jcd.electronicslab.response.UsuarioResponse;
 import co.com.jcd.electronicslab.service.IUsuarioService;
 import co.com.jcd.electronicslab.utils.ResponseUtils;
@@ -32,9 +33,9 @@ public class UsuarioController {
 			BindingResult result) {
 		validador.validate(request, result);
 		if(result.hasErrors()) { // mejorar este metodo creando uno generico para generar el mensaje de resultado de validacion
-			UsuarioResponse response = (UsuarioResponse) ResponseUtils
-					.generarRespuestaValidador(result);
-			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			ResponseRest response = new UsuarioResponse();			
+			response = ResponseUtils.generarRespuestaValidador(result, response);
+			return new ResponseEntity<>((UsuarioResponse)response, HttpStatus.BAD_REQUEST);
 		}
 		return usuarioService.crearUsuario(request);
 	}

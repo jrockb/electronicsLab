@@ -18,6 +18,7 @@ public class UsuarioRequest {
 	@NotEmpty
 	@Size(min =  3, max = 8) // para definir un minimo y maximo de caracteres
 	private String aliasUsuario;
+	@NotEmpty
 	private String identificacion; // va ser validado por la clase validador
 	@NotEmpty
 	private String telefono;

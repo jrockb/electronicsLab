@@ -6,8 +6,8 @@ import co.com.jcd.electronicslab.response.ResponseRest;
 
 public class ResponseUtils {
 	
-	public static ResponseRest generarRespuestaValidador(BindingResult result){		
-		ResponseRest response = new ResponseRest();
+	public static ResponseRest generarRespuestaValidador(BindingResult result, 
+			ResponseRest response){
 		StringBuilder errores = new StringBuilder();
 		errores.append("Error validando campos: ");
 		if (result.getErrorCount() > 1) {
