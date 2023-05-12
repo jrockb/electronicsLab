@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.com.jcd.electronicslab.request.ProyectoRequest;
 import co.com.jcd.electronicslab.response.ProyectoResponse;
 import co.com.jcd.electronicslab.service.IProyectoService;
+import co.com.jcd.electronicslab.utils.ResponseUtils;
 
 @RestController
 @RequestMapping("/electronicslab")
@@ -26,16 +27,8 @@ public class ProyectoController {
 	public ResponseEntity<ProyectoResponse> crearProyecto(@Valid @RequestBody ProyectoRequest request, 
 			BindingResult result) {
 		if(result.hasErrors()) { // mejorar este metodo creando uno generico para generar el mensaje de resultado de validacion
-			StringBuilder errores = new StringBuilder();
-			ProyectoResponse response = new ProyectoResponse();
-			errores.append("Error validando campos: ");
-			result.getFieldErrors().forEach(err -> {
-				errores.append("el campo "+err.getField()+" "+
-						err.getDefaultMessage()+" ");
-			});
-			response.setCodigo("-2");
-			response.setRespuesta(errores.toString());
-			response.setTipo("NA");
+			ProyectoResponse response = (ProyectoResponse) ResponseUtils
+					.generarRespuestaValidador(result);
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
 		return proyectoService.crearProyecto(request);

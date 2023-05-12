@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import co.com.jcd.electronicslab.model.Usuario;
 import co.com.jcd.electronicslab.model.dao.IUsuarioDao;
@@ -17,6 +18,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	private IUsuarioDao usuarioDao;
 
 	@Override
+	@Transactional
 	public ResponseEntity<UsuarioResponse> crearUsuario(UsuarioRequest request) {
 		UsuarioResponse response = new UsuarioResponse();
 		Usuario usuario = new Usuario(request.getNombre(), 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.com.jcd.electronicslab.request.UsuarioRequest;
 import co.com.jcd.electronicslab.response.UsuarioResponse;
 import co.com.jcd.electronicslab.service.IUsuarioService;
+import co.com.jcd.electronicslab.utils.ResponseUtils;
 import co.com.jcd.electronicslab.validators.UsuarioValidador;
 
 @RestController
@@ -31,17 +32,8 @@ public class UsuarioController {
 			BindingResult result) {
 		validador.validate(request, result);
 		if(result.hasErrors()) { // mejorar este metodo creando uno generico para generar el mensaje de resultado de validacion
-			StringBuilder errores = new StringBuilder();
-			UsuarioResponse response = new UsuarioResponse();
-			errores.append("Error validando campos: ");
-			result.getFieldErrors().forEach(err -> {
-				String msj = err.getDefaultMessage() != null ? err.getDefaultMessage() : err.getCode();
-				errores.append("el campo "+err.getField()+" "+
-						msj+" ");
-			});
-			response.setCodigo("-2");
-			response.setRespuesta(errores.toString());
-			response.setTipo("NA");
+			UsuarioResponse response = (UsuarioResponse) ResponseUtils
+					.generarRespuestaValidador(result);
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
 		return usuarioService.crearUsuario(request);
