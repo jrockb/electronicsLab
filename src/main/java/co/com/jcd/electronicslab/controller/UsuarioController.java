@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,11 +30,15 @@ public class UsuarioController {
 	@Autowired
 	private IUsuarioService usuarioService;
 	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.addValidators(validador);
+	}
+	
 	@PostMapping("/crearUsuario")	
 	public ResponseEntity<UsuarioResponse> obtenerUsuarios(@Valid @RequestBody UsuarioRequest request, 
 			BindingResult result) {
-		validador.validate(request, result);
-		if(result.hasErrors()) { // mejorar este metodo creando uno generico para generar el mensaje de resultado de validacion
+		if(result.hasErrors()) { 
 			ResponseRest response = new UsuarioResponse();			
 			response = ResponseUtils.generarRespuestaValidador(result, response);
 			return new ResponseEntity<>((UsuarioResponse)response, HttpStatus.BAD_REQUEST);
