@@ -1,6 +1,7 @@
 package co.com.jcd.electronicslab.request;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -15,7 +16,7 @@ public class UsuarioRequest {
 	private String nombre;
 	@NotEmpty
 	private String apellido;
-	@NotEmpty
+	@NotBlank
 	@Size(min =  3, max = 8) // para definir un minimo y maximo de caracteres
 	private String aliasUsuario;
 	@NotEmpty
