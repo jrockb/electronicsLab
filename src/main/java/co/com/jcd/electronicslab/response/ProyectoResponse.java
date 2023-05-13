@@ -8,6 +8,6 @@ import lombok.Setter;
 public class ProyectoResponse extends ResponseRest{
 	
 	private Long codigoProyecto;
-	
+	private String nombreProyecto;
 
 }

@@ -33,6 +33,7 @@ public class ProyectoServiceImpl implements IProyectoService {
 				response.setTipo("Ejecución exitosa");
 				response.setRespuesta("OK");
 				response.setCodigoProyecto(proyectoGuardar.getId());
+				response.setNombreProyecto(proyectoGuardar.getNombre());
 			} else {
 				response.setCodigo("-1");
 				response.setTipo("No se guardó el proyecto en la base de datos");
