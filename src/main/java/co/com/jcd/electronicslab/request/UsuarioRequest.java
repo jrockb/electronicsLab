@@ -6,6 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import co.com.jcd.electronicslab.validators.IdentificadorRegex;
+import co.com.jcd.electronicslab.validators.Requerido;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ public class UsuarioRequest {
 	
 	//@NotEmpty ya no es necesaria porque se implementa un validador para este campo  
 	private String nombre;
-	@NotEmpty
+	@Requerido
 	private String apellido;
 	@NotBlank
 	@Size(min =  3, max = 8) // para definir un minimo y maximo de caracteres
