@@ -13,15 +13,17 @@ public class UsuarioValidador implements Validator{
 	@Override
 	public boolean supports(Class<?> clazz) { // que clase se va validar	
 		return UsuarioRequest.class.isAssignableFrom(clazz);
-	}
-
+	}	
+	
 	@Override
 	public void validate(Object target, Errors errors) { // validar campo
-		UsuarioRequest usuario = (UsuarioRequest) target;
+		//UsuarioRequest usuario = (UsuarioRequest) target;
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nombre", "El nombre de usuario no debe estar vacío");
-		if(!usuario.getIdentificacion().matches("\\d{7}|\\d{10}")) {
-			errors.rejectValue("identificacion", "el número de identificación debe tener 10 o 7 digitos");
-		}
+		// si se va validar por anotación se debe comentar el código que hace la validación por clase:
+		
+//		if(!usuario.getIdentificacion().matches("\\d{7}|\\d{10}")) {
+//			errors.rejectValue("identificacion", "el número de identificación debe tener 10 o 7 digitos");
+//		}
 		
 		/**
 		 * otra opcion para validar el nombre:
@@ -33,5 +35,5 @@ public class UsuarioValidador implements Validator{
 		 * 
 		 */
 	}
-
+	
 }
