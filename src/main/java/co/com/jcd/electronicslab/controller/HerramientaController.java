@@ -1,11 +1,17 @@
 package co.com.jcd.electronicslab.controller;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +29,14 @@ public class HerramientaController {
 	
 	@Autowired
 	private IHerramientaService herramientaService;
+	
+	// validar fechas con initBinder en vez de anotaciones
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		format.setLenient(false); // analizar los formatos de fecha de manera estricta
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, false));
+	}
 	
 	@PostMapping("/crearHerramienta")
 	public ResponseEntity<HerramientaResponse> crearHerramienta(@Valid @RequestBody HerramientaRequest request, 

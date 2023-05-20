@@ -9,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.jcd.electronicslab.request.UsuarioRequest;
@@ -36,7 +38,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping("/crearUsuario")	
-	public ResponseEntity<UsuarioResponse> obtenerUsuarios(@Valid @RequestBody UsuarioRequest request, 
+	public ResponseEntity<UsuarioResponse> crearUsuarios(@Valid @RequestBody UsuarioRequest request, 
 			BindingResult result) {
 		if(result.hasErrors()) { 
 			ResponseRest response = new UsuarioResponse();			
@@ -44,6 +46,12 @@ public class UsuarioController {
 			return new ResponseEntity<>((UsuarioResponse)response, HttpStatus.BAD_REQUEST);
 		}
 		return usuarioService.crearUsuario(request);
+	}
+	
+	@PutMapping("/asignarProyectoUsuario")
+	public ResponseEntity<UsuarioResponse> asignarProyecto(@RequestParam String idProyecto, 
+			@RequestParam String idUsuario){
+		return usuarioService.asignarProyectoUsuario(Long.valueOf(idProyecto), Long.valueOf(idUsuario));		
 	}
 	
 	

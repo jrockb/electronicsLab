@@ -29,6 +29,7 @@ public class UsuarioRequest {
 	private String direccion;
 	@NotEmpty
 	@Email(message = "Correo con formato incorrecto")
-	private String email;
+	private String email;	
+	private String idProyecto;
 
 }

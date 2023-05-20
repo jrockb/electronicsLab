@@ -8,5 +8,7 @@ import co.com.jcd.electronicslab.response.UsuarioResponse;
 public interface IUsuarioService {
 	
 	public ResponseEntity<UsuarioResponse> crearUsuario(UsuarioRequest request);
+	
+	public ResponseEntity<UsuarioResponse> asignarProyectoUsuario(Long idProyecto, Long idUsuario);
 
 }
