@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.com.jcd.electronicslab.request.UsuarioRequest;
 import co.com.jcd.electronicslab.response.ResponseRest;
+import co.com.jcd.electronicslab.response.UsuarioDtoResponse;
 import co.com.jcd.electronicslab.response.UsuarioResponse;
 import co.com.jcd.electronicslab.service.IUsuarioService;
 import co.com.jcd.electronicslab.utils.ResponseUtils;
@@ -54,6 +56,10 @@ public class UsuarioController {
 		return usuarioService.asignarProyectoUsuario(Long.valueOf(idProyecto), Long.valueOf(idUsuario));		
 	}
 	
+	@GetMapping("/obtenerUsuarios")
+	public ResponseEntity<UsuarioDtoResponse> obtenerUsuarios(){
+		return usuarioService.buscarUsuarios();
+	}
 	
 
 }

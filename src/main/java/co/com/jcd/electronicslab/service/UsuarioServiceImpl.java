@@ -1,5 +1,7 @@
 package co.com.jcd.electronicslab.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -10,11 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.com.jcd.electronicslab.dto.UsuarioDto;
 import co.com.jcd.electronicslab.model.Proyecto;
 import co.com.jcd.electronicslab.model.Usuario;
 import co.com.jcd.electronicslab.model.dao.IProyectoDao;
 import co.com.jcd.electronicslab.model.dao.IUsuarioDao;
 import co.com.jcd.electronicslab.request.UsuarioRequest;
+import co.com.jcd.electronicslab.response.UsuarioDtoResponse;
 import co.com.jcd.electronicslab.response.UsuarioResponse;
 
 @Service
@@ -128,6 +132,39 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);		
 		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResponseEntity<UsuarioDtoResponse> buscarUsuarios() {
+		UsuarioDtoResponse response = new UsuarioDtoResponse();
+		List<Usuario> usuarios = (List<Usuario>) usuarioDao.findAll();
+		List<UsuarioDto> listUsuario = new ArrayList<>();
+		if(!usuarios.isEmpty()) {			
+			for(Usuario usr : usuarios) {
+				UsuarioDto usrDto = new UsuarioDto();
+				usrDto.setNombre(usr.getNombre());
+				usrDto.setApellido(usr.getApellido());
+				usrDto.setAliasUsuario(usr.getAliasUsuario());
+				usrDto.setIdentificacion(usr.getIdentificacion());
+				usrDto.setDireccion(usr.getDireccion());
+				usrDto.setTelefono(usr.getTelefono());
+				usrDto.setEmail(usr.getEmail());
+				usrDto.setProyectos(usr.getProyectos());
+				listUsuario.add(usrDto);
+			}
+			response.setUsuarios(listUsuario);
+			response.setCodigo("00");
+			response.setTipo("Ejecución exitosa");
+			response.setRespuesta("OK");
+			return new ResponseEntity<>(response, HttpStatus.OK);	
+		} else {
+			response.setCodigo("-1");
+			response.setTipo("OK");
+			response.setRespuesta("No se encontraron usuarios");
+			return new ResponseEntity<>(response, HttpStatus.OK);	
+		}
+			
 	}
 
 }

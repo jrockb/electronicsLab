@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +36,7 @@ public class Proyecto implements Serializable{
 	@Column(name = "fecha_Fin")
 	private Date fechaFin; 
 	@ManyToOne(targetEntity = Usuario.class)
+	@JsonBackReference
 	private Usuario usuario;
 	
 	public Proyecto(String nombre, String tipo, 

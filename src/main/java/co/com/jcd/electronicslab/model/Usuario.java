@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,7 +54,7 @@ public class Usuario implements Serializable{
 	@JoinTable(name="usuario_herramienta", 
 		joinColumns = @JoinColumn(name = "usuario_id"),
 		inverseJoinColumns = @JoinColumn(name = "herramienta_id"),
-		uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","herramienta_id"})})	
+		uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","herramienta_id"})})
 	private List<Herramienta> herramientas;
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name="usuario_componente", 
@@ -60,7 +62,8 @@ public class Usuario implements Serializable{
 		inverseJoinColumns = @JoinColumn(name = "componente_id"),
 		uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","componente_id"})})	
 	private List<Componente> componentes;
-	@OneToMany(mappedBy = "usuario")	
+	@OneToMany(mappedBy = "usuario")
+	@JsonManagedReference
 	private List<Proyecto> proyectos;
 	
 	public Usuario(String nombre, String apellido, String aliasUsuario, 
