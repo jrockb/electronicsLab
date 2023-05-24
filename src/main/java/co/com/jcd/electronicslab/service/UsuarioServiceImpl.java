@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.com.jcd.electronicslab.dto.UsuarioDto;
+import co.com.jcd.electronicslab.errors.UsuarioNoEncontradoException;
 import co.com.jcd.electronicslab.model.Proyecto;
 import co.com.jcd.electronicslab.model.Usuario;
 import co.com.jcd.electronicslab.model.dao.IProyectoDao;
@@ -175,6 +176,33 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			return new ResponseEntity<>(response, HttpStatus.OK);	
 		}
 			
+	}
+	
+	// mejorar con modelMapper
+	@Override
+	public ResponseEntity<UsuarioDtoResponse> buscarUsuarioPorId(String id) {
+		UsuarioDtoResponse response = new UsuarioDtoResponse();		
+		Optional<Usuario> usuario = usuarioDao.findById(Long.valueOf(id));
+		if(usuario.isPresent()) {
+			List<UsuarioDto> listUsuario = new ArrayList<>();
+			UsuarioDto usuarioDto = new UsuarioDto();
+			usuarioDto.setNombre(usuario.get().getNombre());
+			usuarioDto.setApellido(usuario.get().getApellido());
+			usuarioDto.setAliasUsuario(usuario.get().getAliasUsuario());
+			usuarioDto.setDireccion(usuario.get().getDireccion());
+			usuarioDto.setIdentificacion(usuario.get().getIdentificacion());
+			usuarioDto.setEmail(usuario.get().getEmail());
+			usuarioDto.setTelefono(usuario.get().getTelefono());
+			usuarioDto.setProyectos(usuario.get().getProyectos());
+			listUsuario.add(usuarioDto);
+			response.setUsuarios(listUsuario);
+			response.setCodigo("00");
+			response.setTipo("Ejecución exitosa");
+			response.setRespuesta("OK");
+			return new ResponseEntity<>(response, HttpStatus.OK);	
+		} else {
+			throw new UsuarioNoEncontradoException(id); // lanzar excepción personalizada
+		}		
 	}
 
 }

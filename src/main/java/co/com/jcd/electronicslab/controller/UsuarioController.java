@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,6 +60,11 @@ public class UsuarioController {
 	@GetMapping("/obtenerUsuarios")
 	public ResponseEntity<UsuarioDtoResponse> obtenerUsuarios(){
 		return usuarioService.buscarUsuarios();
+	}
+	
+	@GetMapping("/verUsuario/{id}")
+	public ResponseEntity<UsuarioDtoResponse> obtenerUsuarioPorId(@PathVariable String id){
+		return usuarioService.buscarUsuarioPorId(id);
 	}
 	
 

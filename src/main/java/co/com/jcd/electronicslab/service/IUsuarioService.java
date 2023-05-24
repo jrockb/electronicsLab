@@ -13,5 +13,7 @@ public interface IUsuarioService {
 	public ResponseEntity<UsuarioResponse> asignarProyectoUsuario(Long idProyecto, Long idUsuario);
 	
 	public ResponseEntity<UsuarioDtoResponse> buscarUsuarios();
+	
+	public ResponseEntity<UsuarioDtoResponse> buscarUsuarioPorId(String id);
 
 }
