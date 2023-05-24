@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	
 	@Autowired
 	private IProyectoDao proyectoDao;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	@Transactional
@@ -40,14 +44,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		UsuarioResponse response = new UsuarioResponse();
 		Optional<Usuario> usuarioGuardado = usuarioDao
 				.findByIdentificacion(request.getIdentificacion());
-		if(usuarioGuardado.isEmpty()) {			
-			Usuario usuario = new Usuario(request.getNombre(), 
-					request.getApellido(), 
-					request.getAliasUsuario(),
-					request.getIdentificacion(),
-					request.getTelefono(), 
-					request.getDireccion(), 
-					request.getEmail());		
+		if(usuarioGuardado.isEmpty()) {	
+			Usuario usuario = modelMapper.map(request, Usuario.class);	
 			try {
 				Usuario usuarioGuardar = usuarioDao.save(usuario);
 				if(usuarioGuardar.getId() != null) {
@@ -152,16 +150,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		List<Usuario> usuarios = (List<Usuario>) usuarioDao.findAll();
 		List<UsuarioDto> listUsuario = new ArrayList<>();
 		if(!usuarios.isEmpty()) {			
-			for(Usuario usr : usuarios) {
-				UsuarioDto usrDto = new UsuarioDto();
-				usrDto.setNombre(usr.getNombre());
-				usrDto.setApellido(usr.getApellido());
-				usrDto.setAliasUsuario(usr.getAliasUsuario());
-				usrDto.setIdentificacion(usr.getIdentificacion());
-				usrDto.setDireccion(usr.getDireccion());
-				usrDto.setTelefono(usr.getTelefono());
-				usrDto.setEmail(usr.getEmail());
-				usrDto.setProyectos(usr.getProyectos());
+			for(Usuario usr : usuarios) {				
+				UsuarioDto usrDto = modelMapper.map(usr,  UsuarioDto.class);
 				listUsuario.add(usrDto);
 			}
 			response.setUsuarios(listUsuario);
@@ -178,22 +168,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			
 	}
 	
-	// mejorar con modelMapper
 	@Override
+	@Transactional(readOnly= true)
 	public ResponseEntity<UsuarioDtoResponse> buscarUsuarioPorId(String id) {
 		UsuarioDtoResponse response = new UsuarioDtoResponse();		
 		Optional<Usuario> usuario = usuarioDao.findById(Long.valueOf(id));
 		if(usuario.isPresent()) {
 			List<UsuarioDto> listUsuario = new ArrayList<>();
-			UsuarioDto usuarioDto = new UsuarioDto();
-			usuarioDto.setNombre(usuario.get().getNombre());
-			usuarioDto.setApellido(usuario.get().getApellido());
-			usuarioDto.setAliasUsuario(usuario.get().getAliasUsuario());
-			usuarioDto.setDireccion(usuario.get().getDireccion());
-			usuarioDto.setIdentificacion(usuario.get().getIdentificacion());
-			usuarioDto.setEmail(usuario.get().getEmail());
-			usuarioDto.setTelefono(usuario.get().getTelefono());
-			usuarioDto.setProyectos(usuario.get().getProyectos());
+			UsuarioDto usuarioDto = modelMapper.map(usuario.get(), UsuarioDto.class);			
 			listUsuario.add(usuarioDto);
 			response.setUsuarios(listUsuario);
 			response.setCodigo("00");
