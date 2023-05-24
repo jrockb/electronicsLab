@@ -37,44 +37,54 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	public ResponseEntity<UsuarioResponse> crearUsuario(UsuarioRequest request) {
 		log.info("Inicio de metodo crearUsuario");
 		UsuarioResponse response = new UsuarioResponse();
-		Usuario usuario = new Usuario(request.getNombre(), 
-				request.getApellido(), 
-				request.getAliasUsuario(),
-				request.getIdentificacion(),
-				request.getTelefono(), 
-				request.getDireccion(), 
-				request.getEmail());		
-		try {
-			Usuario usuarioGuardar = usuarioDao.save(usuario);
-			if(usuarioGuardar.getId() != null) {
-				response.setCodigo("00");
-				response.setTipo("Ejecución exitosa");
-				response.setRespuesta("OK");
-				response.setId(usuarioGuardar.getId());
-				log.info("Usuario creado correctamente");
-				if(request.getIdProyecto() != null) {
-					log.info("Creando asociación de proyecto");
-					Optional<Proyecto> proyecto = proyectoDao
-							.findById(Long.valueOf(request.getIdProyecto()));
-					if(proyecto.isPresent()) {
-						Proyecto proyectoActualizar = proyecto.get();
-						proyectoActualizar.setUsuario(usuarioGuardar);
-						proyectoDao.save(proyectoActualizar);						
+		Optional<Usuario> usuarioGuardado = usuarioDao
+				.findByIdentificacion(request.getIdentificacion());
+		if(usuarioGuardado.isEmpty()) {			
+			Usuario usuario = new Usuario(request.getNombre(), 
+					request.getApellido(), 
+					request.getAliasUsuario(),
+					request.getIdentificacion(),
+					request.getTelefono(), 
+					request.getDireccion(), 
+					request.getEmail());		
+			try {
+				Usuario usuarioGuardar = usuarioDao.save(usuario);
+				if(usuarioGuardar.getId() != null) {
+					response.setCodigo("00");
+					response.setTipo("Ejecución exitosa");
+					response.setRespuesta("OK");
+					response.setId(usuarioGuardar.getId());
+					log.info("Usuario creado correctamente");
+					if(request.getIdProyecto() != null) {
+						log.info("Creando asociación de proyecto");
+						Optional<Proyecto> proyecto = proyectoDao
+								.findById(Long.valueOf(request.getIdProyecto()));
+						if(proyecto.isPresent()) {
+							Proyecto proyectoActualizar = proyecto.get();
+							proyectoActualizar.setUsuario(usuarioGuardar);
+							proyectoDao.save(proyectoActualizar);						
+						}
 					}
+				} else {
+					log.error("No se guardó el proyecto en la base de datos");
+					response.setCodigo("-1");
+					response.setTipo("No se guardó el proyecto en la base de datos");
+					response.setRespuesta("NA");
+					return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 				}
-			} else {
-				log.error("No se guardó el proyecto en la base de datos");
+			} catch(Exception ex) {
+				log.error("Error creando el usuario: "+ex.getMessage());
 				response.setCodigo("-1");
-				response.setTipo("No se guardó el proyecto en la base de datos");
+				response.setTipo("Error creando el proyecto");
 				response.setRespuesta("NA");
-				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-		} catch(Exception ex) {
-			log.error("Error creando el usuario: "+ex.getMessage());
+		} else {
+			log.error("El usuario con ese número de identificación ya existe");
 			response.setCodigo("-1");
-			response.setTipo("Error creando el proyecto");
-			response.setRespuesta("NA");
-			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			response.setTipo("NOK");
+			response.setRespuesta("El usuario con ese número de identificación ya existe");
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
